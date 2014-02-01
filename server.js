@@ -71,6 +71,10 @@ io.set('log level', 1);
 	 })
 // socket.broadcast.emit('user connected');
 
+	socket.on('showUsers',function (data) {
+		console.log(users);
+	});
+
 });
 
 

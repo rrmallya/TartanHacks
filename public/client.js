@@ -260,7 +260,10 @@ socket.on('removePost', function (data) {
     }
 });
 
+$('#points').on('click',function(){
 
+  socket.emit('showUsers',{});
+})
 
 $(document.body).on('click', '.post', function() {
      var index = $(this).index();
