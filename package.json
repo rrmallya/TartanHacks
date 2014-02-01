@@ -12,5 +12,12 @@
     "type": "git",
     "url": "https://github.com/rrmallya/TartanHacks.git"
   },
-  "author": "developer"
+  "author": "developer",
+  "subdomain": "chinweiw-TartanHacks",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
 }

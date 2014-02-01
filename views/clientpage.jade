@@ -7,13 +7,14 @@ html
 		
 	body
 
-		#content(style='width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;')
-		.controls
-			<input style="width:350px;" id="field" class="field">
-			<input type="button" id="send" class="send" value="name"/>
-			<input type="button" id="post" class="send" value="Post Help"/>
-
 		
+		.controls
+			<!--<input style="width:350px;" id="field" class="field">-->
+			<!--<input type="button" id="send" class="send" value="name"/> -->
+			<!--<input type="button" id="post" class="send" value="Post Help"/>-->
+
+		<input type="button" id="points" value="log points" />
+
 		#fb-root
 
 		a#login-btn(href="#", onclick="fb_login();")
@@ -23,7 +24,9 @@ html
 
 		.container
 			#request-help
-				p This is a help message!
+				p#usrname
+				p What can we do for you today!
+				<input style="width:350px;" id="field" class="field">
 				a#submit-btn(href="#") Help!
 
 		#post-container		
