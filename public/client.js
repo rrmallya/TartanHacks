@@ -1,79 +1,16 @@
+// var socket = io.connect('http://chinweiw-tartanhacks.nodejitsu.com/');
+var socket =io.connect('http://localhost:3700');
 
-/*window.onload = function() {
- 
-    var messages = [];
-    var socket = io.connect('http://localhost:3700');
-    var field = document.getElementById("field");
-    var sendButton = document.getElementById("send");
-    var content = document.getElementById("content");
- 
-    socket.on('message', function (data) {
-        if(data.message) {
-            messages.push(data.message);
-            var html = '';
-            for(var i=0; i<messages.length; i++) {
-                html += messages[i] + '<br />';
-            }
-            content.innerHTML = html;
-=======
-var socket = io.connect('http://localhost');
-var username;
-
-window.fbAsyncInit = function() {
-    FB.init({
-        appId   : '346049582201169',
-        oauth   : true,
-        status  : true, // check login status
-        cookie  : true, // enable cookies to allow the server to access the session
-        xfbml   : true // parse XFBML
-    });
-};
-
-function fb_login(){
-    FB.login(function(response) {
-        if (response.authResponse) {
-            console.log('Welcome!  Fetching your information.... ');
-            //console.log(response); // dump complete info
-            access_token = response.authResponse.accessToken; //get access token
-            user_id = response.authResponse.userID; //get FB UID
-
-            FB.api('/me', function(response) {
-              console.log(response.name, 'response data');
-                username = response.name;
-                socket.emit('username', username);
-                user_email = response.email; //get user email
-          // you can store this data into your database             
-            });
-
->>>>>>> 7f0db8505060c619bc83b01bc11bed7aec096988
-        } else {
-            //user hit cancel button
-            console.log('User cancelled login or did not fully authorize.');
-
-        }
-    }, {
-        scope: 'publish_stream,email'
-    });
-<<<<<<< HEAD
- 
-    sendButton.onclick = function() {
-        var text = field.value;
-        socket.emit('send', { message: text });
-    };
- 
-}*/
-
-
-var socket = io.connect('http://chinweiw-tartanhacks.nodejitsu.com/');
 var username;
 var thumbnail;
+var points;
 var field = document.getElementById("field");
 
 window.onload = function() {
  
     
     
-    //var sendButton = document.getElementById("send");
+    var sendButton = document.getElementById("send");
     var content = document.getElementById("content");
     var usr;
     socket.on('login', function (data) {
@@ -83,46 +20,6 @@ window.onload = function() {
             
         }
     });
- 
-   /* sendButton.onclick = function() {
-        usr = field.value;
-       
-    };*/
-
-    /*socket.on('pageLoad',function (data){
-        alert("message received");
-            if(data.page=='helpFeed'){
-            var helpReq=prompt("What do you need "+usr+"?");
-            var loc;
-            if (navigator.geolocation)
-    {
-    navigator.geolocation.getCurrentPosition(function(position){
-      var latlng=position.coords.latitude+","+position.coords.longitude;
-      console.log(latlng);
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET","http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=true" , false);
-      xhr.send();
-      console.log(xhr.status);
-      console.log(xhr.statusText);
-      xmlDocument = xhr.responseText;
-      var addresses=JSON.parse(xmlDocument);
-      console.log( addresses.results[0].formatted_address);
-      loc = addresses.results[0].formatted_address;
-        socket.emit('helpReq',{req:helpReq, locations:loc,points:10});
-    });
-    }
-
-
-           
-        }
-        else
-            {console.log("Didn't load shit.");}
-
-    })
-    function findLocation(){
-
-        
-    }*/
  
 }
 
@@ -214,6 +111,8 @@ socket.on('pageLoad', function (data) {
         $('#request-help').show();
         $('#usrname').html(username);
 
+        points=data.points;
+        console.log(username+" has "+points);
 
         $('#submit-btn').click(function(){
             var helpMsg=field.value;
@@ -266,6 +165,13 @@ socket.on('removePost', function (data) {
     }
 });
 
+
+socket.on('updatePoints',function (data){
+    points=data;
+    console.log(username+" has "+points);
+
+})
+
 $('#points').on('click',function(){
 
   socket.emit('showUsers',{});
@@ -276,4 +182,80 @@ $(document.body).on('click', '.post', function() {
      socket.emit('removePost', index);
 
 });
+
+
+function setActive(e){
+  var par = $(event.target).closest("li").attr("id");
+  console.log(par);
+  window.activeRequest = par;
+  $("#popup-content").html("");
+  $("#popup-content").append("<div class='active list-content'></div>");
+  $(".active.list-content").append($("#"+window.activeRequest).find(".list-content").html());
+  $("#popup-content").append("<div class='active list-meta'></div>");
+  $(".active.list-meta").append($("#"+window.activeRequest).find(".list-meta").html());
+}
+
+function untoggle(){
+  $(".hidden").removeClass("hidden");
+  $(".active-request").html("");
+  $(".ui-page").css("min-height", "0px");
+  $(".ui-page").css("padding-top", $(".header").height());
+}
+
+function acceptRequest(){
+  $(".hidden").removeClass("hidden");
+  console.log("Accepted " + window.activeRequest);
+  $(".active-request").html("<div class='active-header'>Now Helping</div>");
+  $(".active-header").append("<a href='' onclick=untoggle()><img src='images/close.png' class='active-close' /></a>");
+  $(".active-request").append("<div class='active-body'></div>");
+  $(".active-body").append("<div class='active list-content'></div>");
+  $(".active.list-content").append($("#"+window.activeRequest).find(".list-content").html());
+  $(".active-body").append("<div class='active list-meta'></div>");
+  $(".active.list-meta").append($("#"+window.activeRequest).find(".list-meta").html());
+  $(".active-request").append("<div class='active-footer'></div>");
+  $("#"+window.activeRequest).addClass("hidden");
+}
+
+$(document).on("pageinit", function(event){
+  $('.list-expand').click(function(e){
+    if($(this).hasClass("protected") == false){
+      $('.dropdown-btn').slideUp(100);
+      $(this).addClass("protected");
+      setTimeout(function(){
+        $(".protected").removeClass("protected");
+        },150);
+      if($(this).hasClass("down") == false){
+        $(this).parent().find('.dropdown-btn').slideDown(100);
+        $(".down").removeClass("down");
+        $(this).addClass("down");
+      }
+      else {
+        $(this).removeClass("down");
+      }
+    }
+  });
+});
+
+$(document).ready(function(){
+  $("li").each(function() {
+    $(this).attr("id", Math.random().toString(36).slice(2));
+  });
+})
+
+
+
+
+// (function(){var a;if(navigator.platform==="iPad"){a=window.orientation!==90||window.orientation===-90?"images/startup-tablet-landscape.png":"images/startup-tablet-portrait.png"}else{a=window.devicePixelRatio===2?"images/startup-retina.png":"images/startup.png"}document.write('<link rel="apple-touch-startup-image" href="'+a+'"/>')})()
+// The script prevents links from opening in mobile safari. https://gist.github.com/1042026
+
+// (function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")
+
+
+
+
+
+
+
+
+
 

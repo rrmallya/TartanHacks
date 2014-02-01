@@ -35,7 +35,7 @@ io.set('log level', 1);
     socket.on('username', function (data) {
     	users=users.concat([{id:usrid , name: data.name,points:100}]);
     	console.log(users);
-        socket.emit('pageLoad', {page:'helpFeed'});
+        socket.emit('pageLoad', {page:'helpFeed',points:100});
         socket.emit('populatePosts',posts);
 
     });
@@ -44,15 +44,16 @@ io.set('log level', 1);
 	socket.on('helpReq', function (data) {
 		console.log(data);
 		posts.push(data);
-		io.sockets.emit('populatePosts', posts);
+		var pointsupdated;
 			for(var i=0;i<users.length;i++){
 	 		if(users[i].id==socket.id){
 	 			users[i].points-=10;
 	 			console.log(users);
+	 			socket.emit('updatePoints',users[i].points);
 	 		}
-
 	 	}
-	})
+	 	io.sockets.emit('populatePosts', posts);
+	});
 
 	 socket.on('removePost', function (data) {
 	 	console.log('lets remove',data);
@@ -62,13 +63,15 @@ io.set('log level', 1);
 	 	for(var i=0;i<users.length;i++){
 	 		if(users[i].id==socket.id){
 	 			users[i].points+=10;
+	 			pointsupdated=users[i].points;
+	 			socket.emit('updatePoints',users[i].points);
 	 			console.log(users);
 	 		}
 
 	 	}
 	 	
 	 	io.sockets.emit('populatePosts', posts);
-	 })
+	 });
 // socket.broadcast.emit('user connected');
 
 	socket.on('showUsers',function (data) {

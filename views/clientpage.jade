@@ -1,39 +1,256 @@
 doctype html
 html
 	head
-		title= "Real time web chat"
+		title reQuest
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1')
+		meta(name='apple-mobile-web-app-capable', content='yes')
+		meta(name='apple-mobile-web-app-status-bar-style', content='black')
+		meta(name='HandheldFriendly', content='True')
+		meta(name='MobileOptimized', content='320')
+
+
+
+
+		// jQuery Mobile CSS bits
+		link(rel='stylesheet', href='css/jquery.mobile-1.4.0.min.css')
+		link(rel='stylesheet', href='css/GREEN.min.css')
+
+		// Custom css
 		
-		<link rel="stylesheet" href="css/style.css">
+		link(rel='stylesheet', href='css/style.css')
+		link(rel='stylesheet', href='css/custom.css')
+		
+		
 		
 	body
 
 		
-		.controls
+		//- .controls
 			<!--<input style="width:350px;" id="field" class="field">-->
 			<!--<input type="button" id="send" class="send" value="name"/> -->
 			<!--<input type="button" id="post" class="send" value="Post Help"/>-->
 
-		<input type="button" id="points" value="log points" />
+		//- <input type="button" id="points" value="log points" />
 
 		#fb-root
+		//- a#login(ref="#", onclick="fb_login();", data-role='page')
+		
+		//- .button#facebooklogin
+		//- 	p Log in with facebook
+		
+		#login(data-role="page")
+			.container
+				.flat-form
+					#login.form-action.show
+						<img class="logo" src="images/logo-med.png">
+						a(href='#', onclick='fb_login();')
+							#facebooklogin.button(value='join')
+								img.fbimg(src='images/facebook_login.png')
+						form
+							#menu-centered
+								ul
+									li.loginform
+										input(type='text', placeholder='Username')
+									li.loginform
+										input(type='password', placeholder='Password')
+									li.loginform
+										a(href='#main')
+											input(type='submit', value='Sign in', style='background: #81a809;', onclick='window.location="#main";')
+									li.loginform
+										input(type='button', value='Sign up', style='background: #fff;')
+		#main(data-role='page')
+			.header(data-role='header', data-id='persistent1', data-theme='a', data-position='fixed', data-tap-toggle='false')
+				.header-main
+					img(src='images/greg.png')
+					.text-box
+						.main-name.white J. Random Hacker
+						.location.white Newell-Simon Hall 301
+						.coins.white 100
+				.header-edit(onclick='$.mobile.changePage("#post", {transition: "pop", changeHash: true, role: "dialog"}); ')		
+				.active-request
+			.noclick(data-role='content')
+				ul.requests
+					li
+						.list-main
+							.list-content
+								img(src='images/murderer.png')
+								.name.inline Joe Bloggs
+								.coins.inline +100
+								.request-text Need a Mac display port to DVI dongle for 30 minutes for a presentation
+							.list-meta
+								.request-time.list-foot In 20 min
+								.request-location.list-foot Gates Hillman Center 6103
+								.request-distance 0.1 mi
+						.list-expand
+						.controls
+							button.dropdown-btn.share-btn Share Request
+							a(href='#popup', data-transition='pop', onclick='setActive(event)')
+								button.dropdown-btn.help-btn Accept Request
+					li
+						.list-main
+							.list-content
+								img(src='images/steve.png')
+								.name.inline Joey Bagadonutz
+								.coins.inline +1
+								.request-text gimme some of that red bull man you know i’m good for it
+							.list-meta
+								.request-time.list-foot In 5 min
+								.request-location.list-foot Newell-Simon Hall 302
+								.request-distance 0.3 mi
+						.list-expand
+						.controls
+							button.dropdown-btn.share-btn Share Request
+							a(href='#popup', data-transition='pop', onclick='setActive(event)')
+								button.dropdown-btn.help-btn Accept Request
+					li
+						.list-main
+							.list-content
+								img(src='images/brian.png')
+								.name.inline Alan Smithee
+								.coins.inline +9
+								.request-text Urgently need some Bat-shark repellent; Sharknado is getting closer.
+							.list-meta
+								.request-time.list-foot In 1 min
+								.request-location.list-foot Hamerschlag Hall 100
+								.request-distance 0.5 mi
+						.list-expand
+						.controls
+							button.dropdown-btn.share-btn Share Request
+							a(href='#popup', data-transition='pop', onclick='setActive(event)')
+								button.dropdown-btn.help-btn Accept Request
+					li
+						.list-main
+							.list-content
+								img(src='images/firstworld.png')
+								.name.inline Mrs. Kafoops
+								.coins.inline +5
+								.request-text Need a fourth player for League
+							.list-meta
+								.request-time.list-foot In 30 min
+								.request-location.list-foot Gates Hillman Center 4102
+								.request-distance 0.3 mi
+						.list-expand
+						.controls
+							button.dropdown-btn.share-btn Share Request
+							a(href='#popup', data-transition='pop', onclick='setActive(event)')
+								button.dropdown-btn.help-btn Accept Request
+			.footer(data-role='footer', data-theme='a', data-id='persistent2', data-position='fixed', data-tap-toggle='false')
+				.button-container
+					.bottom-button.page-active
+						| Nearby Requests
+					a(href='#my-requests')
+						.bottom-button
+							| My Requests	
+		#my-requests(data-role='page')
+			.header(data-role='header', data-theme='a', data-id='persistent1', data-position='fixed', data-tap-toggle='false')
+				.header-main
+					img(src='images/greg.png')
+					.text-box
+						.main-name.white J. Random Hacker
+						.location.white Newell-Simon Hall 301
+						.coins.white 100
+				.header(onclick='window.location="#post";')
+				.active-request
+			.noclick(data-role='content')
+				ul.requests
+					li
+						.list-main
+							.list-content
+								img(src='images/greg-small.png')
+								.name.inline J. Random Hacker
+								.coins.inline +1
+								.request-text Looking for someone to help me finish my hack by the deadline
+							.list-meta
+								.request-time.list-foot In 1 min
+								.request-location.list-foot Newell-Simon Hall 301
+								.request-distance 0.0 mi
+						.list-expand
+						.controls
+							.dropdown-btn.views 10 views
+							div
+								button.dropdown-btn.edit-btn Edit Request
+								button.dropdown-btn.cancel-btn Cancel Request
+			.footer(data-role='footer', data-theme='a', data-id='persistent2', data-position='fixed', data-tap-toggle='false')
+				.button-container
+					a(href='#main')
+						.bottom-button
+							| Nearby Requests
+					.bottom-button.page-active
+						| My Requests
+		#post(data-role='page')
+			.header(data-role='header', data-id='persistent1', data-theme='a', data-position='fixed', data-tap-toggle='false')
+				.header
+					img(src='images/greg.png')
+					.text-box
+						.main-name.white J. Random Hacker
+						.location.white Newell-Simon Hall 301
+						.coins.white 100
+				.header(onclick='window.location="#post";')
+				.active-request
+			div(data-role='content')
+				.text-content
+					textarea#help-content(type='text', placeholder='What do you need in a hurry?')
+					.ui-grid-c.inline-fields
+						.ui-block-a.label Reward:
+						.reward.ui-block-b
+							input#reward.coin-bg(type='text', name='reward', placeholder='10')
+						.ui-block-c.label Due by:
+						.time.ui-block-d
+							input#due-time(type='time', name='time')
+			.footer(data-role='footer', data-theme='a', data-id='persistent2', data-position='fixed', data-tap-toggle='false')
+				.button-container
+					a(href='#my-requests', data-transition='pop', data-direction='reverse')
+						.bottom-button
+							| Make Request
+					a(href='#main', data-rel-='data-rel-', back='back', data-transition='pop', data-direction='reverse')
+						.bottom-button.gray
+							| Cancel
+		#popup(data-role='dialog', data-theme='a')
+			div(data-role='header', style='box-shadow: none;', data-theme='a', data-tap-toggle='false')
+				h1 Confirm
+			div(data-role='content')
+				.text-content
+					ul#popup-content.requests
+						li(style='border: none;')
+			.footer(data-role='footer', style='box-shadow: none;', data-theme='a', data-tap-toggle='false')
+				.button-container
+					a(href='#main', data-transition='pop', data-direction='reverse', onclick='acceptRequest()')
+						#accept-request.bottom-button
+							| YES
+					a(href='#main', data-rel='back', data-transition='pop', data-direction='reverse')
+						.bottom-button.gray
+							| NO
+						
 
-		a#login-btn(href="#", onclick="fb_login();")
-			.button#facebooklogin
-				p Log in with facebook
 
+		//- .container
+		//- 	#request-help
+		//- 		p#usrname
+		//- 		p What can we do for you today!
+		//- 		<input style="width:350px;" id="field" class="field">
+		//- 		a#submit-btn(href="#") Help!
 
-		.container
-			#request-help
-				p#usrname
-				p What can we do for you today!
-				<input style="width:350px;" id="field" class="field">
-				a#submit-btn(href="#") Help!
+		//- #post-container		
 
-		#post-container		
 
 		
-		
+
+		script(src='js/jquery.js')
+		script
+			$(document).bind("mobileinit", function(){
+			$.mobile.defaultPageTransition = "slide";
+			});
+		script(src='js/jquery.mobile-1.4.0.js')
+		script(src='js/mobileinit.js')
+		script(src='js/ios-orientationchange-fix.min.js')
 		script(src='/socket.io/socket.io.js')
-		script(src='libs/jquery.js')
+		
+
+		
+		
+		
+		// Startup Images for iDevices
+		
 		script(src='/client.js')
 

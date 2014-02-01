@@ -1,0 +1,39 @@
+doctype html
+html
+	head
+		title= "Request"
+		
+		<link rel="stylesheet" href="css/style.css">
+		
+	body
+
+		
+		.controls
+			<!--<input style="width:350px;" id="field" class="field">-->
+			<!--<input type="button" id="send" class="send" value="name"/> -->
+			<!--<input type="button" id="post" class="send" value="Post Help"/>-->
+
+		<input type="button" id="points" value="log points" />
+
+		#fb-root
+
+		a#login-btn(href="#", onclick="fb_login();")
+			.button#facebooklogin
+				p Log in with facebook
+
+
+		.container
+			#request-help
+				p#usrname
+				p What can we do for you today!
+				<input style="width:350px;" id="field" class="field">
+				a#submit-btn(href="#") Help!
+
+		#post-container		
+
+		
+		
+		script(src='/socket.io/socket.io.js')
+		script(src='libs/jquery.js')
+		script(src='/client.js')
+
