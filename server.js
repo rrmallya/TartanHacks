@@ -45,16 +45,23 @@ io.set('log level', 1);
 		console.log(data);
 		posts.push(data);
 		io.sockets.emit('populatePosts', posts);
+			for(var i=0;i<users.length;i++){
+	 		if(users[i].id==socket.id){
+	 			users[i].points-=10;
+	 			console.log(users);
+	 		}
+
+	 	}
 	})
 
 	 socket.on('removePost', function (data) {
 	 	console.log('lets remove',data);
 	 	posts.splice(data, 1);
-	 	console.log(posts.length);
-	 	console.log(posts);
-	 	for(var user in users){
-	 		if(user.id==socket.id){
-	 			user.points+=10;
+	 	console.log(users);
+	 	console.log("sender: ",socket.id);
+	 	for(var i=0;i<users.length;i++){
+	 		if(users[i].id==socket.id){
+	 			users[i].points+=10;
 	 			console.log(users);
 	 		}
 
