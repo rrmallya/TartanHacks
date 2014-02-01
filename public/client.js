@@ -4,7 +4,8 @@ var socket =io.connect('http://localhost:3700');
 var username;
 var thumbnail;
 var points;
-var field = document.getElementById("field");
+var loc;
+var field = document.getElementById("help-content");
 
 window.onload = function() {
  
@@ -55,7 +56,9 @@ window.fbAsyncInit = function() {
                 username = response.name;
                 thumbnail=response.picture.data.url;
                 console.log(username,thumbnail);
-                socket.emit('username', {name:username});
+                $('.header-main > img').attr('src',thumbnail);
+                $('.main-name').html(username);
+                socket.emit('username', {name:username,image:thumbnail});
                 user_email = response.email; //get user email
           // you can store this data into your database             
             });
@@ -109,6 +112,7 @@ socket.on('pageLoad', function (data) {
 
     if(data.page=="helpFeed"){
         $('#request-help').show();
+        window.location="#main";
         $('#usrname').html(username);
 
         points=data.points;
@@ -116,7 +120,9 @@ socket.on('pageLoad', function (data) {
 
         $('#submit-btn').click(function(){
             var helpMsg=field.value;
-            var loc;
+            
+
+            alert (helpMsg);
 
 
             if (navigator.geolocation)
@@ -136,6 +142,7 @@ socket.on('pageLoad', function (data) {
                         socket.emit('helpReq', {
                             name: username,
                             message: helpMsg,
+                            image:thumbnail,
                             usrlocation:loc,
                             points: 10
                             });
@@ -152,9 +159,43 @@ socket.on('pageLoad', function (data) {
 
 
 socket.on('populatePosts', function (data) {
-   $('#post-container').empty();
+   $('#request-list').empty();
+
+
     for (var i=0; i<data.length; i++) {
-        $('#post-container').append('<div class="post">'+data[i].name+'\n'+data[i].message+'\n'+data[i].points+'\n'+data[i].usrlocation+i+'<a  href="#">Help this person!</a></div>');
+
+        console.log(data[i], 'data!');
+        $('#request-list').append(
+
+        
+
+      '<li>'+
+      '<div class="list-main">'+
+      '<div class="list-content">'+
+      '<img src='+data[i].image+'/>'+
+      '<div class="name inline">'+data[i].name+'</div>'+
+      '<div class="coins inline">+1</div>'+
+      '<div class="request-text">'+data[i].message+'</div>'+
+      '</div>'+
+      '<div class="list-meta">'+
+      '<div class="request-time list-foot">In 1 min</div>'+
+      '<div class="request-location list-foot">'+loc+'</div>'+
+      '<div class="request-distance">0.0 mi</div>'+
+      '</div>'+
+      '</div>'+
+      '<div class="list-expand">'+
+      '</div>'+
+      '<div class="controls">'+
+      '<div class="dropdown-btn views">10 views</div>'+
+      '<div>'+
+      '<button class="dropdown-btn share-btn ui-btn ui-shadow ui-corner-all" style="display: inline-block;">Edit Request</button>'+
+      '<button class="dropdown-btn cancel-btn ui-btn ui-shadow ui-corner-all" style="display: inline-block;">Cancel Request</button>'+
+      '</div>   '+
+      '</div>'+
+      '</li>'
+
+
+      );
     }
 });
 

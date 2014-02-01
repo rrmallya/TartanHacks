@@ -33,7 +33,7 @@ io.set('log level', 1);
     socket.emit('login', {status:'Ready'});
     var usrid=socket.id;
     socket.on('username', function (data) {
-    	users=users.concat([{id:usrid , name: data.name,points:100}]);
+    	users=users.concat([{id:usrid , name: data.name,image:data.image,points:100}]);
     	console.log(users);
         socket.emit('pageLoad', {page:'helpFeed',points:100});
         socket.emit('populatePosts',posts);

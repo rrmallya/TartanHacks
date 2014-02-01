@@ -62,7 +62,7 @@ html
 		#main(data-role='page')
 			.header(data-role='header', data-id='persistent1', data-theme='a', data-position='fixed', data-tap-toggle='false')
 				.header-main
-					img(src='images/greg.png')
+					img#image1(src='images/greg.png')
 					.text-box
 						.main-name.white J. Random Hacker
 						.location.white Newell-Simon Hall 301
@@ -150,27 +150,45 @@ html
 						.main-name.white J. Random Hacker
 						.location.white Newell-Simon Hall 301
 						.coins.white 100
-				.header(onclick='window.location="#post";')
+				.header-edit(onclick='window.location="#post";')
 				.active-request
 			.noclick(data-role='content')
-				ul.requests
-					li
-						.list-main
-							.list-content
-								img(src='images/greg-small.png')
-								.name.inline J. Random Hacker
-								.coins.inline +1
-								.request-text Looking for someone to help me finish my hack by the deadline
-							.list-meta
-								.request-time.list-foot In 1 min
-								.request-location.list-foot Newell-Simon Hall 301
-								.request-distance 0.0 mi
-						.list-expand
-						.controls
-							.dropdown-btn.views 10 views
-							div
-								button.dropdown-btn.edit-btn Edit Request
-								button.dropdown-btn.cancel-btn Cancel Request
+				ul.requests#request-list
+					//- li
+					//- 	.list-main
+					//- 		.list-content
+					//- 			img(src='images/greg-small.png')
+					//- 			.name.inline J. Random Hacker
+					//- 			.coins.inline +1
+					//- 			.request-text Looking for someone to help me finish my hack by the deadline
+					//- 		.list-meta
+					//- 			.request-time.list-foot In 1 min
+					//- 			.request-location.list-foot Newell-Simon Hall 301
+					//- 			.request-distance 0.0 mi
+					//- 	.list-expand
+					//- 	.controls
+					//- 		.dropdown-btn.views 10 views
+					//- 		div
+					//- 			button.dropdown-btn.edit-btn Edit Request
+					//- 			button.dropdown-btn.cancel-btn Cancel Request
+			
+					//- li
+					//- 	.list-main
+					//- 		.list-content
+					//- 			img(src='images/greg-small.png')
+					//- 			.name.inline J. Random Hacker
+					//- 			.coins.inline +1
+					//- 			.request-text Looking for someone to help me finish my hack by the deadline
+					//- 		.list-meta
+					//- 			.request-time.list-foot In 1 min
+					//- 			.request-location.list-foot Newell-Simon Hall 301
+					//- 			.request-distance 0.0 mi
+					//- 	.list-expand
+					//- 	.controls
+					//- 		.dropdown-btn.views 10 views
+					//- 		div
+					//- 			button.dropdown-btn.edit-btn Edit Request
+					//- 			button.dropdown-btn.cancel-btn Cancel Request			
 			.footer(data-role='footer', data-theme='a', data-id='persistent2', data-position='fixed', data-tap-toggle='false')
 				.button-container
 					a(href='#main')
@@ -180,7 +198,7 @@ html
 						| My Requests
 		#post(data-role='page')
 			.header(data-role='header', data-id='persistent1', data-theme='a', data-position='fixed', data-tap-toggle='false')
-				.header
+				.header-main
 					img(src='images/greg.png')
 					.text-box
 						.main-name.white J. Random Hacker
@@ -200,7 +218,7 @@ html
 							input#due-time(type='time', name='time')
 			.footer(data-role='footer', data-theme='a', data-id='persistent2', data-position='fixed', data-tap-toggle='false')
 				.button-container
-					a(href='#my-requests', data-transition='pop', data-direction='reverse')
+					a(id="submit-btn", href='#my-requests', data-transition='pop', data-direction='reverse')
 						.bottom-button
 							| Make Request
 					a(href='#main', data-rel-='data-rel-', back='back', data-transition='pop', data-direction='reverse')
