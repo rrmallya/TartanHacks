@@ -2,11 +2,30 @@ doctype html
 html
 	head
 		title= "Real time web chat"
-		script(src='/socket.io/socket.io.js')
-		script(src='/client.js')
+		
+		<link rel="stylesheet" href="css/style.css">
+		
 	body
+<<<<<<< HEAD
 		#content(style='width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;')
 		.controls
 			<input style="width:350px;" id="field" class="field">
 			<input type="button" id="send" class="send" value="name"/>
 			<input type="button" id="post" class="send" value="Post Help"/>
+=======
+		
+		//- .controls
+		//- 	<input style="width:350px;" id="field" class="field">
+		//- 	<input type="button" id="send" class="send"/>
+		//- <a href="#" onclick="fb_login();"><div class="button" id="facebooklogin"><p style="text-align:center">Log in with facebook</p></div></a>
+		<div id="fb-root"></div>
+		<a id="login-btn" href="#" onclick="fb_login();"><div class="button" id="facebooklogin"><p style="text-align:center">Log in with facebook</p></div></a>
+		<div class="container">
+
+		
+		</div>
+		
+		script(src='/socket.io/socket.io.js')
+		script(src='libs/jquery.js')
+		script(src='/client.js')
+>>>>>>> 7f0db8505060c619bc83b01bc11bed7aec096988

@@ -1,0 +1,220 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+<div id="fb-root"></div>
+<!--<script>
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '346049582201169',
+    status     : true, // check login status
+    cookie     : true, // enable cookies to allow the server to access the session
+    xfbml      : true  // parse XFBML
+  });
+
+  // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
+  // for any authentication related change, such as login, logout or session refresh. This means that
+  // whenever someone who was previously logged out tries to log in again, the correct case below 
+  // will be handled. 
+  FB.Event.subscribe('auth.authResponseChange', function(response) {
+    // Here we specify what we do with the response anytime this event occurs. 
+    if (response.status === 'connected') {
+      // The response object is returned with a status field that lets the app know the current
+      // login status of the person. In this case, were handling the situation where they 
+      // have logged in to the app.
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // In this case, the person is logged into Facebook, but not into the app, so we call
+      // FB.login() to prompt them to do so. 
+      // In real-life usage, you wouldn't want to immediately prompt someone to login 
+      // like this, for two reasons:
+      // (1) JavaScript created popup windows are blocked by most browsers unless they 
+      // result from direct interaction from people using the app (such as a mouse click)
+      // (2) it is a bad experience to be continually prompted to login upon page load.
+      FB.login();
+    } else {
+      // In this case, the person is not logged into Facebook, so we call the login() 
+      // function to prompt them to do so. Note that at this stage there is no indication
+      // of whether they are logged into the app. If they aren't then they'll see the Login
+      // dialog right after they log in to Facebook. 
+      // The same caveats as above apply to the FB.login() call here.
+      FB.login();
+    }
+  });
+  };
+
+  // Load the SDK asynchronously
+  (function(d){
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   js.src = "//connect.facebook.net/en_US/all.js";
+   ref.parentNode.insertBefore(js, ref);
+  }(document));
+
+  // Here we run a very simple test of the Graph API after login is successful. 
+  // This testAPI() function is only called in those cases. 
+  function testAPI() {
+    /*console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Good to see you, ' + response.name + '.');
+    });*/
+      window.location.href = 'logginsuccess.html';
+  }
+</script>-->
+
+<!--
+  Below we include the Login Button social plugin. This button uses the JavaScript SDK to
+  present a graphical Login button that triggers the FB.login() function when clicked. -->
+
+
+<script>
+
+window.fbAsyncInit = function() {
+    FB.init({
+        appId   : '346049582201169',
+        oauth   : true,
+        status  : true, // check login status
+        cookie  : true, // enable cookies to allow the server to access the session
+        xfbml   : true // parse XFBML
+    });
+
+  };
+
+function fb_login(){
+    FB.login(function(response) {
+
+        if (response.authResponse) {
+            console.log('Welcome!  Fetching your information.... ');
+            //console.log(response); // dump complete info
+            access_token = response.authResponse.accessToken; //get access token
+            user_id = response.authResponse.userID; //get FB UID
+
+            FB.api('/me', function(response) {
+              console.log(response);
+                user_email = response.email; //get user email
+          // you can store this data into your database             
+            });
+
+        } else {
+            //user hit cancel button
+            console.log('User cancelled login or did not fully authorize.');
+
+        }
+    }, {
+        scope: 'publish_stream,email'
+    });
+}
+(function() {
+    var e = document.createElement('script');
+    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+    e.async = true;
+    document.getElementById('fb-root').appendChild(e);
+}());
+
+
+</script>
+<!--
+  <div style="text-align: center;">
+  <div style="box-sizing: border-box; display: inline-block; width: auto; max-width: 480px; background-color: #FFFFFF; border: 2px solid #0361A8; border-radius: 5px; box-shadow: 0px 0px 8px #0361A8; margin: 50px auto auto;">
+
+
+  <div style="background: #0361A8; border-radius: 5px 5px 0px 0px; padding: 15px;">
+    <span style="font-family: verdana,arial; color: #D4D4D4; font-size: 1.00em; font-weight:bold;">Enter your login and password</span></div>
+  <div style="background: ; padding: 15px">
+  <style type="text/css" scoped>
+  td { text-align:left; font-family: verdana,arial; color: #064073; font-size: 1.00em; }
+  input { border: 1px solid #CCCCCC; border-radius: 5px; color: #666666; display: inline-block; font-size: 1.00em;  padding: 5px; width: 100%; }
+  input[type="button"], input[type="reset"], input[type="submit"] { height: auto; width: auto; cursor: pointer; box-shadow: 0px 0px 5px #0361A8; float: right; margin-top: 10px; }
+  table.center { margin-left:auto; margin-right:auto; }
+  .error { font-family: verdana,arial; color: #D41313; font-size: 1.00em; }
+  </style>
+  <div>
+<a href="#" onclick="fb_login();"><img src="images/fb_login_awesome.jpg" border="0" alt=""></a>
+<!--<div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="true"></div>-->
+<!--</div>-->
+ <div class="container">
+        <div class="flat-form">
+            <ul class="tabs">
+                <li>
+                    <a href="#login" class="active">Login</a>
+                </li>
+                <!--<li>
+                    <a href="#register">Register</a>
+                </li>
+                <li>
+                    <a href="#reset">Reset Password</a>
+                </li>-->
+            </ul>
+            <div id="login" class="form-action show">
+                <h1 style="text-align: center">proxiMate</h1>
+                <p>
+                    
+                </p>
+                <a href="#" onclick="fb_login();"><div class="button" id="facebooklogin"><p style="text-align:center">Log in with facebook</p></div></a>
+                &nbsp;
+                <form>
+                    <ul>
+                        <li>
+                            <input type="text" placeholder="Username" />
+                        </li>
+                        <li>
+                            <input type="password" placeholder="Password" />
+                        </li>
+                        <li>
+                            <input type="submit" value="Login" class="button" />
+                        </li>
+                    </ul>
+                </form>
+            </div>
+            <!--/#login.form-action-->
+            <div id="register" class="form-action hide">
+                <h1>Register</h1>
+                <p>
+                    You are helping yourself.
+                </p>
+                <form>
+                    <ul>
+                        <li>
+                            <input type="text" placeholder="Username" />
+                        </li>
+                        <li>
+                            <input type="password" placeholder="Password" />
+                        </li>
+                        <li>
+                            <input type="submit" value="Sign Up" class="button" />
+                        </li>
+                    </ul>
+                </form>
+            </div>
+            <!--/#register.form-action-->
+            <div id="reset" class="form-action hide">
+                <h1>Reset Password</h1>
+                <p>
+                    To reset your password enter your email and your birthday
+                    and we'll send you a link to reset your password.
+                </p>
+                <form>
+                    <ul>
+                        <li>
+                            <input type="text" placeholder="Email" />
+                        </li>
+                        <li>
+                            <input type="text" placeholder="Birthday" />
+                        </li>
+                        <li>
+                            <input type="submit" value="Send" class="button" />
+                        </li>
+                    </ul>
+                </form>
+            </div>
+            <!--/#register.form-action-->
+        </div>
+    </div>
+    <script class="cssdeck" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script src="login.js"></script>
+
+</body>
+</html>
