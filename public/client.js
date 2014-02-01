@@ -64,9 +64,11 @@ function fb_login(){
 }*/
 
 
-var socket = io.connect('http://localhost:3700');
+var socket = io.connect('http://chinweiw-tartanhacks.nodejitsu.com/');
+//var socket =io.connect('http://localhost:3700');
 var username;
 var thumbnail;
+var points;
 var field = document.getElementById("field");
 
 window.onload = function() {
@@ -210,7 +212,8 @@ socket.on('pageLoad', function (data) {
     if(data.page=="helpFeed"){
         $('#request-help').show();
         $('#usrname').html(username);
-
+        points=data.points;
+        console.log(username+" has "+points);
         $('#submit-btn').click(function(){
             var helpMsg=field.value;
             var loc;
@@ -259,6 +262,13 @@ socket.on('removePost', function (data) {
         $('#post-container').append('<div class="post" >'+data[i].name+'\n'+data[i].message+'\n'+data[i].points+'\n'+data[i].usrlocation+i+'<a href="#">Help this person!</a></div>');
     }
 });
+
+
+socket.on('updatePoints',function (data){
+    points=data;
+    console.log(username+" has "+points);
+
+})
 
 $('#points').on('click',function(){
 
