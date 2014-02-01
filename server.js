@@ -2,10 +2,8 @@ var express = require("express");
 var app = express();
 var port = 3700;
 var users=[];
-var posts = [];
 
-
-
+var posts=[];
 
  app.set('views', __dirname + '/views');
 
@@ -28,8 +26,11 @@ io.set('log level', 1);
 
 io.sockets.on('connection', function (socket) {
 
-    
-    socket.emit('login', {login:'now'});
+
+io.set('log level', 1);
+
+
+    socket.emit('login', {status:'Ready'});
     var usrid=socket.id;
     socket.on('username', function (data) {
     	users=users.concat([{id:socket.id , name: data.name}]);
@@ -38,7 +39,8 @@ io.sockets.on('connection', function (socket) {
 
     });
 
-	socket.on('submit_help', function (data) {
+
+	socket.on('helpReq', function (data) {
 		
 		posts.push(data);
 		console.log(posts);

@@ -1,3 +1,21 @@
+
+/*window.onload = function() {
+ 
+    var messages = [];
+    var socket = io.connect('http://localhost:3700');
+    var field = document.getElementById("field");
+    var sendButton = document.getElementById("send");
+    var content = document.getElementById("content");
+ 
+    socket.on('message', function (data) {
+        if(data.message) {
+            messages.push(data.message);
+            var html = '';
+            for(var i=0; i<messages.length; i++) {
+                html += messages[i] + '<br />';
+            }
+            content.innerHTML = html;
+=======
 var socket = io.connect('http://localhost');
 var username;
 
@@ -27,6 +45,7 @@ function fb_login(){
           // you can store this data into your database             
             });
 
+>>>>>>> 7f0db8505060c619bc83b01bc11bed7aec096988
         } else {
             //user hit cancel button
             console.log('User cancelled login or did not fully authorize.');
@@ -35,6 +54,71 @@ function fb_login(){
     }, {
         scope: 'publish_stream,email'
     });
+<<<<<<< HEAD
+ 
+    sendButton.onclick = function() {
+        var text = field.value;
+        socket.emit('send', { message: text });
+    };
+ 
+}*/
+window.onload = function() {
+ 
+    var messages = [];
+    var socket = io.connect('http://localhost:3700');
+    var field = document.getElementById("field");
+    var sendButton = document.getElementById("send");
+    var content = document.getElementById("content");
+    var usr;
+    socket.on('login', function (data) {
+        if(data.status=='Ready')
+        {
+            alert("ready to login!");
+        }
+    });
+ 
+    sendButton.onclick = function() {
+        usr = field.value;
+        socket.emit('username', { name: usr });
+        console.log(usr);
+    };
+    socket.on('pageLoad',function (data){
+        alert("message received");
+            if(data.page=='helpFeed'){
+            var helpReq=prompt("What do you need "+usr+"?");
+            var loc;
+            if (navigator.geolocation)
+    {
+    navigator.geolocation.getCurrentPosition(function(position){
+      var latlng=position.coords.latitude+","+position.coords.longitude;
+      console.log(latlng);
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET","http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=true" , false);
+      xhr.send();
+      console.log(xhr.status);
+      console.log(xhr.statusText);
+      xmlDocument = xhr.responseText;
+      var addresses=JSON.parse(xmlDocument);
+      console.log( addresses.results[0].formatted_address);
+      loc = addresses.results[0].formatted_address;
+        socket.emit('helpReq',{req:helpReq, locations:loc,points:10});
+    });
+    }
+
+
+           
+        }
+        else
+            {console.log("Didn't load shit.");}
+
+    })
+    function findLocation(){
+
+        
+    }
+ 
+}
+
 
 
      FB.Event.subscribe('auth.authResponseChange', function(response) {
@@ -65,7 +149,7 @@ function fb_login(){
     }
   }); 
 
-}
+
 (function() {
     var e = document.createElement('script');
     e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
@@ -111,5 +195,3 @@ $(document.body).on('click', '.post', function(e) {
 
 });
 
-
-   

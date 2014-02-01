@@ -6,6 +6,13 @@ html
 		<link rel="stylesheet" href="css/style.css">
 		
 	body
+
+		#content(style='width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;')
+		.controls
+			<input style="width:350px;" id="field" class="field">
+			<input type="button" id="send" class="send" value="name"/>
+			<input type="button" id="post" class="send" value="Post Help"/>
+
 		
 		#fb-root
 
@@ -26,3 +33,4 @@ html
 		script(src='/socket.io/socket.io.js')
 		script(src='libs/jquery.js')
 		script(src='/client.js')
+
