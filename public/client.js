@@ -62,10 +62,16 @@ function fb_login(){
     };
  
 }*/
+
+
+var socket = io.connect('http://localhost:3700');
+var username;
+
+
 window.onload = function() {
  
     var messages = [];
-    var socket = io.connect('http://localhost:3700');
+    
     var field = document.getElementById("field");
     var sendButton = document.getElementById("send");
     var content = document.getElementById("content");
@@ -73,7 +79,7 @@ window.onload = function() {
     socket.on('login', function (data) {
         if(data.status=='Ready')
         {
-            alert("ready to login!");
+            // alert("ready to login!");
         }
     });
  
@@ -121,6 +127,45 @@ window.onload = function() {
 
 
 
+
+window.fbAsyncInit = function() {
+    FB.init({
+        appId   : '346049582201169',
+        oauth   : true,
+        status  : true, // check login status
+        cookie  : true, // enable cookies to allow the server to access the session
+        xfbml   : true // parse XFBML
+    });
+};
+
+
+
+     function fb_login(){
+    FB.login(function(response) {
+        if (response.authResponse) {
+            console.log('Welcome!  Fetching your information.... ');
+            //console.log(response); // dump complete info
+            access_token = response.authResponse.accessToken; //get access token
+            user_id = response.authResponse.userID; //get FB UID
+
+            FB.api('/me', function(response) {
+              console.log(response.name, 'response data');
+                username = response.name;
+                socket.emit('username', username);
+                user_email = response.email; //get user email
+          // you can store this data into your database             
+            });
+
+        } else {
+            //user hit cancel button
+            console.log('User cancelled login or did not fully authorize.');
+
+        }
+    }, {
+        scope: 'publish_stream,email'
+    });
+
+
      FB.Event.subscribe('auth.authResponseChange', function(response) {
     // Here we specify what we do with the response anytime this event occurs. 
     if (response.status === 'connected') {
@@ -149,14 +194,13 @@ window.onload = function() {
     }
   }); 
 
-
+}
 (function() {
     var e = document.createElement('script');
     e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
     e.async = true;
     document.getElementById('fb-root').appendChild(e);
 }());
-
 
 socket.on('pageLoad', function (data) {
     // alert ('pageload!');
