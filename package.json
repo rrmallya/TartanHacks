@@ -1,7 +1,7 @@
 {
   "name": "RealTimeWebChat",
   "main": "server.js",
-  "version": "0.0.0",
+  "version": "0.0.0-2",
   "description": "Real time web chat",
   "dependencies": {
     "socket.io": "latest",

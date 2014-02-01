@@ -64,7 +64,7 @@ function fb_login(){
 }*/
 
 
-var socket = io.connect('http://localhost:3700');
+var socket = io.connect('http://chinweiw-tartanhacks.nodejitsu.com/');
 var username;
 var thumbnail;
 var field = document.getElementById("field");
