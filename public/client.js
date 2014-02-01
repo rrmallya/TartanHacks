@@ -1,5 +1,5 @@
-// var socket = io.connect('http://chinweiw-tartanhacks.nodejitsu.com/');
-var socket =io.connect('http://localhost:3700');
+var socket = io.connect('http://chinweiw-tartanhacks.nodejitsu.com/');
+// var socket =io.connect('http://localhost:3700');
 
 var username;
 var thumbnail;
@@ -17,7 +17,7 @@ window.onload = function() {
     socket.on('login', function (data) {
         if(data.status=='Ready')
         {
-             alert("ready to login!");
+             // alert("ready to login!");
             
         }
     });
@@ -54,7 +54,9 @@ window.fbAsyncInit = function() {
                
 
                 username = response.name;
+
                 thumbnail=response.picture.data.url;
+               
                 console.log(username,thumbnail);
                 $('.header-main > img').attr('src',thumbnail);
                 $('.main-name').html(username);
@@ -122,7 +124,7 @@ socket.on('pageLoad', function (data) {
             var helpMsg=field.value;
             
 
-            alert (helpMsg);
+            // alert (helpMsg);
 
 
             if (navigator.geolocation)
@@ -165,14 +167,14 @@ socket.on('populatePosts', function (data) {
     for (var i=0; i<data.length; i++) {
 
         console.log(data[i], 'data!');
-        $('#request-list').append(
+        $('#request-list').prepend(
 
         
 
       '<li>'+
       '<div class="list-main">'+
       '<div class="list-content">'+
-      '<img src='+data[i].image+'/>'+
+      '<img src="https://fbcdn-profile-a.akamaihd.net/static-ak/rsrc.php/v2/yo/r/UlIqmHJn-SK.gif"/>'+
       '<div class="name inline">'+data[i].name+'</div>'+
       '<div class="coins inline">+1</div>'+
       '<div class="request-text">'+data[i].message+'</div>'+
