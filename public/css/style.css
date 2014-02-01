@@ -1,3 +1,10 @@
-#login-btn {
+#request-help {
+	width: 200px;
+	
+	background: red;
 	display: none;
+}
+
+#request-help.show {
+	display: block;
 }

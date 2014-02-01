@@ -7,16 +7,21 @@ html
 		
 	body
 		
-		//- .controls
-		//- 	<input style="width:350px;" id="field" class="field">
-		//- 	<input type="button" id="send" class="send"/>
-		//- <a href="#" onclick="fb_login();"><div class="button" id="facebooklogin"><p style="text-align:center">Log in with facebook</p></div></a>
-		<div id="fb-root"></div>
-		<a id="login-btn" href="#" onclick="fb_login();"><div class="button" id="facebooklogin"><p style="text-align:center">Log in with facebook</p></div></a>
-		<div class="container">
+		#fb-root
+
+		a#login-btn(href="#", onclick="fb_login();")
+			.button#facebooklogin
+				p Log in with facebook
+
+
+		.container
+			#request-help
+				p This is a help message!
+				a#submit-btn(href="#") Help!
+
+		#post-container		
 
 		
-		</div>
 		
 		script(src='/socket.io/socket.io.js')
 		script(src='libs/jquery.js')

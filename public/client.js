@@ -1,30 +1,6 @@
 var socket = io.connect('http://localhost');
 var username;
 
-
-
-
-
-
-
-
-
-    socket.on('login', function (data) {
-        // alert ('login');
-        $('#login-btn').show();
-        // console.log(username);
-        // display login 
-
-        
-        // socket.emit('my other event', { my: 'data' });
-    });
-
-
-
-
-   
-
-
 window.fbAsyncInit = function() {
     FB.init({
         appId   : '346049582201169',
@@ -33,19 +9,10 @@ window.fbAsyncInit = function() {
         cookie  : true, // enable cookies to allow the server to access the session
         xfbml   : true // parse XFBML
     });
-
 };
-
-
-
-
-
-
-
 
 function fb_login(){
     FB.login(function(response) {
-
         if (response.authResponse) {
             console.log('Welcome!  Fetching your information.... ');
             //console.log(response); // dump complete info
@@ -79,11 +46,6 @@ function fb_login(){
 
     console.log('logged in!');
     
-    
-
-
-
-      // testAPI();
     } else if (response.status === 'not_authorized') {
       // In this case, the person is logged into Facebook, but not into the app, so we call
       // FB.login() to prompt them to do so. 
@@ -112,7 +74,42 @@ function fb_login(){
 }());
 
 
+socket.on('pageLoad', function (data) {
+    // alert ('pageload!');
+    $('#request-help').show();
 
+    $('#submit-btn').click(function(){
+        console.log(username, 'this is a message', 'points?')
+        socket.emit('submit_help', {
+            name: username,
+            message: 'this is a message',
+            points: 'points?'
+        });
+    })
+
+})
+
+socket.on('populate_posts', function (data) {
+    
+    updatePosts(data);
+})
+
+
+function updatePosts(data) {
+    $('#post-container').empty();
+    for (var i=0; i<data.length; i++) {
+        $('#post-container').append('<div class="post">'+data[i].name+'\n'+data[i].message+'\n'+data[i].points+i+'<a href="#">Help this person!</a></div>');
+    }
+}
+
+
+
+$(document.body).on('click', '.post', function(e) {
+     // console.log($(this).index());
+     var index = $(this).index();
+     socket.emit('removePost', index);
+
+});
 
 
    

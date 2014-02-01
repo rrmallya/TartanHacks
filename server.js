@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 var port = 3700;
 var users=[];
+var posts = [];
 
 
 
@@ -37,7 +38,19 @@ io.sockets.on('connection', function (socket) {
 
     });
 
+	socket.on('submit_help', function (data) {
+		
+		posts.push(data);
+		console.log(posts);
+		io.sockets.emit('populate_posts', posts);
+	})
 
+	 socket.on('removePost', function (data) {
+	 	io.sockets.emit('populate_posts', posts);
+	 	posts.splice(data, 1);
+	 	console.log(posts.length);
+	 })
+// socket.broadcast.emit('user connected');
 
 });
 
