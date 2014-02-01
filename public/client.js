@@ -66,29 +66,30 @@ function fb_login(){
 
 var socket = io.connect('http://localhost:3700');
 var username;
-
+var thumbnail;
+var field = document.getElementById("field");
 
 window.onload = function() {
  
-    var messages = [];
     
-    var field = document.getElementById("field");
-    var sendButton = document.getElementById("send");
+    
+    //var sendButton = document.getElementById("send");
     var content = document.getElementById("content");
     var usr;
     socket.on('login', function (data) {
         if(data.status=='Ready')
         {
-            // alert("ready to login!");
+             alert("ready to login!");
+            
         }
     });
  
-    sendButton.onclick = function() {
+   /* sendButton.onclick = function() {
         usr = field.value;
-        socket.emit('username', { name: usr });
-        console.log(usr);
-    };
-    socket.on('pageLoad',function (data){
+       
+    };*/
+
+    /*socket.on('pageLoad',function (data){
         alert("message received");
             if(data.page=='helpFeed'){
             var helpReq=prompt("What do you need "+usr+"?");
@@ -121,7 +122,7 @@ window.onload = function() {
     function findLocation(){
 
         
-    }
+    }*/
  
 }
 
@@ -148,10 +149,14 @@ window.fbAsyncInit = function() {
             access_token = response.authResponse.accessToken; //get access token
             user_id = response.authResponse.userID; //get FB UID
 
-            FB.api('/me', function(response) {
-              console.log(response.name, 'response data');
+            FB.api('/me', {
+              fields: ['name', 'picture']
+            }, function(response) {
+               
                 username = response.name;
-                socket.emit('username', username);
+                thumbnail=response.picture.data.url;
+                console.log(username,thumbnail);
+                socket.emit('username', {name:username});
                 user_email = response.email; //get user email
           // you can store this data into your database             
             });
@@ -166,34 +171,32 @@ window.fbAsyncInit = function() {
     });
 
 
-     FB.Event.subscribe('auth.authResponseChange', function(response) {
-    // Here we specify what we do with the response anytime this event occurs. 
-    if (response.status === 'connected') {
-      // The response object is returned with a status field that lets the app know the current
-      // login status of the person. In this case, we're handling the situation where they 
-      // have logged in to the app.
-
-    console.log('logged in!');
+  //    FB.Event.subscribe('auth.authResponseChange', function(response) {
+  //   // Here we specify what we do with the response anytime this event occurs. 
+  //   if (response.status === 'connected') {
+  //     // The response object is returned with a status field that lets the app know the current
+  //     // login status of the person. In this case, we're handling the situation where they 
+  //     // have logged in to the app.
+  //   console.log('logged in!');
     
-    } else if (response.status === 'not_authorized') {
-      // In this case, the person is logged into Facebook, but not into the app, so we call
-      // FB.login() to prompt them to do so. 
-      // In real-life usage, you wouldn't want to immediately prompt someone to login 
-      // like this, for two reasons:
-      // (1) JavaScript created popup windows are blocked by most browsers unless they 
-      // result from direct interaction from people using the app (such as a mouse click)
-      // (2) it is a bad experience to be continually prompted to login upon page load.
-      FB.login();
-    } else {
-      // In this case, the person is not logged into Facebook, so we call the login() 
-      // function to prompt them to do so. Note that at this stage there is no indication
-      // of whether they are logged into the app. If they aren't then they'll see the Login
-      // dialog right after they log in to Facebook. 
-      // The same caveats as above apply to the FB.login() call here.
-      FB.login();
-    }
-  }); 
-
+  //   } else if (response.status === 'not_authorized') {
+  //     // In this case, the person is logged into Facebook, but not into the app, so we call
+  //     // FB.login() to prompt them to do so. 
+  //     // In real-life usage, you wouldn't want to immediately prompt someone to login 
+  //     // like this, for two reasons:
+  //     // (1) JavaScript created popup windows are blocked by most browsers unless they 
+  //     // result from direct interaction from people using the app (such as a mouse click)
+  //     // (2) it is a bad experience to be continually prompted to login upon page load.
+  //     FB.login();
+  //   } else {
+  //     // In this case, the person is not logged into Facebook, so we call the login() 
+  //     // function to prompt them to do so. Note that at this stage there is no indication
+  //     // of whether they are logged into the app. If they aren't then they'll see the Login
+  //     // dialog right after they log in to Facebook. 
+  //     // The same caveats as above apply to the FB.login() call here.
+  //     FB.login();
+  //   }
+  // }); 
 }
 (function() {
     var e = document.createElement('script');
@@ -204,36 +207,62 @@ window.fbAsyncInit = function() {
 
 socket.on('pageLoad', function (data) {
     // alert ('pageload!');
-    $('#request-help').show();
+    if(data.page=="helpFeed"){
+        $('#request-help').show();
+        $('#usrname').html(username);
 
-    $('#submit-btn').click(function(){
-        console.log(username, 'this is a message', 'points?')
-        socket.emit('submit_help', {
-            name: username,
-            message: 'this is a message',
-            points: 'points?'
-        });
-    })
+        $('#submit-btn').click(function(){
+            var helpMsg=field.value;
+            var loc;
 
-})
+            if (navigator.geolocation)
+               {
+                    navigator.geolocation.getCurrentPosition(function(position){
+                        var latlng=position.coords.latitude+","+position.coords.longitude;
+                        console.log(latlng);
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("GET","http://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&sensor=true" , false);
+                        xhr.send();
+                        console.log(xhr.status);
+                        console.log(xhr.statusText);
+                        xmlDocument = xhr.responseText;
+                        var addresses=JSON.parse(xmlDocument);
+                        console.log( addresses.results[0].formatted_address);
+                        loc = addresses.results[0].formatted_address;
+                        socket.emit('helpReq', {
+                            name: username,
+                            message: helpMsg,
+                            usrlocation:loc,
+                            points: 10
+                            });
+                    });
+                }
+            else
+                {console.log("Didn't load shit.");}
 
-socket.on('populate_posts', function (data) {
-    
-    updatePosts(data);
-})
+        })
 
+            
+        }
+  })
 
-function updatePosts(data) {
-    $('#post-container').empty();
+socket.on('populatePosts', function (data) {
+   $('#post-container').empty();
     for (var i=0; i<data.length; i++) {
-        $('#post-container').append('<div class="post">'+data[i].name+'\n'+data[i].message+'\n'+data[i].points+i+'<a href="#">Help this person!</a></div>');
+        $('#post-container').append('<div class="post">'+data[i].name+'\n'+data[i].message+'\n'+data[i].points+'\n'+data[i].usrlocation+i+'<a  href="#">Help this person!</a></div>');
     }
-}
+});
+
+socket.on('removePost', function (data) {
+   $('#post-container').empty();
+    for (var i=0; i<data.length; i++) {
+        $('#post-container').append('<div class="post" >'+data[i].name+'\n'+data[i].message+'\n'+data[i].points+'\n'+data[i].usrlocation+i+'<a href="#">Help this person!</a></div>');
+    }
+});
 
 
 
-$(document.body).on('click', '.post', function(e) {
-     // console.log($(this).index());
+$(document.body).on('click', '.post', function() {
      var index = $(this).index();
      socket.emit('removePost', index);
 

@@ -33,24 +33,34 @@ io.set('log level', 1);
     socket.emit('login', {status:'Ready'});
     var usrid=socket.id;
     socket.on('username', function (data) {
-    	users=users.concat([{id:socket.id , name: data.name}]);
-    	console.log(data);
+    	users=users.concat([{id:usrid , name: data.name,points:100}]);
+    	console.log(users);
         socket.emit('pageLoad', {page:'helpFeed'});
+        socket.emit('populatePosts',posts);
 
     });
 
 
 	socket.on('helpReq', function (data) {
-		
+		console.log(data);
 		posts.push(data);
-		console.log(posts);
-		io.sockets.emit('populate_posts', posts);
+		io.sockets.emit('populatePosts', posts);
 	})
 
 	 socket.on('removePost', function (data) {
-	 	io.sockets.emit('populate_posts', posts);
+	 	console.log('lets remove',data);
 	 	posts.splice(data, 1);
 	 	console.log(posts.length);
+	 	console.log(posts);
+	 	for(var user in users){
+	 		if(user.id==socket.id){
+	 			user.points+=10;
+	 			console.log(users);
+	 		}
+
+	 	}
+	 	
+	 	io.sockets.emit('populatePosts', posts);
 	 })
 // socket.broadcast.emit('user connected');
 
