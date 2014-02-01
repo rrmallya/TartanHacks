@@ -1,5 +1,5 @@
 var socket = io.connect('http://localhost');
-var username = {};
+var username;
 
 
 
@@ -12,7 +12,7 @@ var username = {};
     socket.on('login', function (data) {
         // alert ('login');
         $('#login-btn').show();
-        console.log(username);
+        // console.log(username);
         // display login 
 
         
@@ -53,7 +53,9 @@ function fb_login(){
             user_id = response.authResponse.userID; //get FB UID
 
             FB.api('/me', function(response) {
-              
+              console.log(response.name, 'response data');
+                username = response.name;
+                socket.emit('username', username);
                 user_email = response.email; //get user email
           // you can store this data into your database             
             });
@@ -76,11 +78,8 @@ function fb_login(){
       // have logged in to the app.
 
     console.log('logged in!');
-    console.log(response);
-    username = response.name;
-    socket.emit('username', { 
-        name: username
-    });
+    
+    
 
 
 
