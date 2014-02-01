@@ -143,13 +143,16 @@ window.fbAsyncInit = function() {
      function fb_login(){
     FB.login(function(response) {
         if (response.authResponse) {
-            console.log('Welcome!  Fetching your information.... ');
+            // console.log('Welcome!  Fetching your information.... ');
             //console.log(response); // dump complete info
             access_token = response.authResponse.accessToken; //get access token
             user_id = response.authResponse.userID; //get FB UID
 
-            FB.api('/me', function(response) {
-              console.log(response.name, 'response data');
+            FB.api('/me', {
+                fields: ["name","picture"],
+
+            }, function(response) {
+              console.log(response, 'response data');
                 username = response.name;
                 socket.emit('username', username);
                 user_email = response.email; //get user email
@@ -207,8 +210,8 @@ socket.on('pageLoad', function (data) {
     $('#request-help').show();
 
     $('#submit-btn').click(function(){
-        console.log(username, 'this is a message', 'points?')
-        socket.emit('submit_help', {
+        // console.log(username, 'this is a message', 'points?')
+        socket.emit('helpReq', {
             name: username,
             message: 'this is a message',
             points: 'points?'
@@ -219,7 +222,10 @@ socket.on('pageLoad', function (data) {
 
 socket.on('populate_posts', function (data) {
     
-    updatePosts(data);
+    $('#post-container').empty();
+    for (var i=0; i<data.length; i++) {
+        $('#post-container').append('<div class="post">'+data[i].name+'\n'+data[i].message+'\n'+data[i].points+i+'<a href="#">Help this person!</a></div>');
+    }
 })
 
 
